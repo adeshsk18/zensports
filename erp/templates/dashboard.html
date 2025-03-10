@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Welcome, {{ request.user.username }}!</h2>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <!-- Inventory Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Recent Products</h4>
+                <a href="{% url 'inventory:product_create' %}" class="btn btn-primary btn-sm">Add Product</a>
+            </div>
+            <div class="card-body">
+                {% if low_stock_products %}
+                <div class="alert alert-warning mb-3">
+                    <h6 class="mb-1">Low Stock Alert!</h6>
+                    <ul class="mb-0 small">
+                        {% for product in low_stock_products %}
+                        <li>{{ product.name }} ({{ product.stock }} remaining)</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endif %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Stock</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                            <tr {% if product in low_stock_products %}class="table-warning"{% endif %}>
+                                <td>{{ product.name }}</td>
+                                <td>{{ product.stock }}</td>
+                                <td>Rs. {{ product.price|floatformat:2 }}</td>
+                                <td>
+                                    <a href="{% url 'inventory:product_detail' product.pk %}" class="btn btn-sm btn-info">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Customers Section -->
+    <div class="col-md-6 mb-4">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Recent Customers</h4>
+                <a href="{% url 'customers:customer_create' %}" class="btn btn-primary btn-sm">Add Customer</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Phone</th>
+                                <th>Email</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>{{ customer.name }}</td>
+                                <td>{{ customer.phone }}</td>
+                                <td>{{ customer.email }}</td>
+                                <td>
+                                    <a href="{% url 'customers:customer_detail' customer.pk %}" class="btn btn-sm btn-info">View</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Invoices Section - Full Width -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Recent Invoices</h4>
+                <a href="{% url 'billing:create_invoice' %}" class="btn btn-primary btn-sm">New Invoice</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Invoice #</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for invoice in recent_invoices %}
+                            <tr>
+                                <td>INV-{{ invoice.invoice_number }}</td>
+                                <td>{{ invoice.customer.name }}</td>
+                                <td>{{ invoice.invoice_date|date:"d-m-Y" }}</td>
+                                <td>Rs. {{ invoice.total|floatformat:2 }}</td>
+                                <td>{{ invoice.payment_status }}</td>
+                                <td>
+                                    <a href="{% url 'billing:generate_pdf' invoice.id %}" class="btn btn-sm btn-secondary">
+                                        <i class="fas fa-file-pdf"></i> PDF
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

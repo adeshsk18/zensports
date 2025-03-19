@@ -144,12 +144,18 @@ LOGOUT_REDIRECT_URL = 'login'
 SESSION_COOKIE_AGE = 3600  # 1 hour in seconds
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 SESSION_SAVE_EVERY_REQUEST = True
-CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = True
 
-# If you're not using HTTPS in development, temporarily set these to False
+# Security settings
 if DEBUG:
+    # In development mode, disable secure cookies
     CSRF_COOKIE_SECURE = False
     SESSION_COOKIE_SECURE = False
+    # Don't require HTTPS for CSRF cookie in development
+    CSRF_COOKIE_SAMESITE = None
+    SESSION_COOKIE_SAMESITE = None
+else:
+    # In production, enable secure settings
+    CSRF_COOKIE_SECURE = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_HTTPONLY = True
+    SESSION_COOKIE_HTTPONLY = True

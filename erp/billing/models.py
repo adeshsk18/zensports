@@ -1,6 +1,7 @@
 from django.db import models
 from customers.models import Customer
 from inventory.models import Product
+from datetime import timedelta
 
 class Invoice(models.Model):
     PAYMENT_STATUS_CHOICES = [
@@ -23,6 +24,11 @@ class Invoice(models.Model):
 
     def __str__(self):
         return f"INV-{self.invoice_number} - Rs. {self.total:,.2f}"
+
+    @property
+    def due_date(self):
+        """Return the due date as 30 days after invoice date."""
+        return self.invoice_date + timedelta(days=30)
 
     def save(self, *args, **kwargs):
         if not self.invoice_number:

@@ -8,4 +8,5 @@ urlpatterns = [
     path('create/', views.create_invoice, name='create_invoice'),
     path('generate-pdf/<int:invoice_id>/', views.generate_pdf, name='generate_pdf'),
     path('delete/<int:invoice_id>/', views.delete_invoice, name='delete_invoice'),
+    path('update-status/<int:invoice_id>/', views.update_status, name='update_status'),
 ] 

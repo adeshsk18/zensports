@@ -1,0 +1,8 @@
+Django==5.1.6
+djangorestframework==3.14.0
+python-dotenv==1.0.1
+reportlab==4.0.7
+Pillow==10.1.0
+django-crispy-forms==2.1
+django-bootstrap5==23.3
+django-filter==23.5 

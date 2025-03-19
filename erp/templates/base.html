@@ -6,6 +6,7 @@
     <title>Zen Sports ERP - {% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.24/css/dataTables.bootstrap5.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
@@ -20,7 +21,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'inventory:product_list' %}">Inventory</a>
+                        <a class="nav-link" href="{% url 'dashboard' %}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'inventory:index' %}">Inventory</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'customers:customer_list' %}">Customers</a>
@@ -28,19 +32,13 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'billing:invoice_list' %}">All Invoices</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'billing:create_invoice' %}">New Invoice</a>
-                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <span class="nav-link">Welcome, {{ user.username }}</span>
                     </li>
                     <li class="nav-item">
-                        <form method="post" action="{% url 'logout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="nav-link border-0 bg-transparent">Logout</button>
-                        </form>
+                        <a href="{% url 'logout' %}" class="nav-link">Logout</a>
                     </li>
                 </ul>
             </div>
@@ -51,8 +49,9 @@
     <div class="container mt-4">
         {% if messages %}
             {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
                     {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
             {% endfor %}
         {% endif %}
@@ -60,31 +59,35 @@
         {% block content %}{% endblock %}
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.24/js/dataTables.bootstrap5.min.js"></script>
+    
     <script>
-        // Check login status on every page load
+        // Use vanilla JavaScript to avoid linter issues with Django template tags
         document.addEventListener('DOMContentLoaded', function() {
-            {% if not user.is_authenticated %}
-                if (window.location.pathname !== '{% url "login" %}') {
-                    window.location.href = '{% url "login" %}';
-                }
-            {% endif %}
-        });
-
-        document.addEventListener('DOMContentLoaded', function() {
+            // Handle navbar toggler icon
             const navbarToggler = document.querySelector('.navbar-toggler');
             const navIcon = document.getElementById('navIcon');
             
-            navbarToggler.addEventListener('click', function() {
-                if (this.getAttribute('aria-expanded') === 'true') {
-                    navIcon.classList.remove('navbar-toggler-icon');
-                    navIcon.classList.add('fas', 'fa-times');
-                } else {
-                    navIcon.classList.add('navbar-toggler-icon');
-                    navIcon.classList.remove('fas', 'fa-times');
-                }
-            });
+            if (navbarToggler && navIcon) {
+                navbarToggler.addEventListener('click', function() {
+                    if (this.getAttribute('aria-expanded') === 'true') {
+                        navIcon.classList.remove('navbar-toggler-icon');
+                        navIcon.classList.add('fas', 'fa-times');
+                    } else {
+                        navIcon.classList.add('navbar-toggler-icon');
+                        navIcon.classList.remove('fas', 'fa-times');
+                    }
+                });
+            }
+
+            // Initialize Bootstrap tooltips if available
+            if (typeof bootstrap !== 'undefined') {
+                const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+                [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+            }
         });
     </script>
     {% block extra_js %}{% endblock %}

@@ -23,6 +23,7 @@ class Product(models.Model):
     stock = models.IntegerField(default=0, validators=[MinValueValidator(0)])
     reorder_level = models.IntegerField(default=10, validators=[MinValueValidator(0)],
                                       help_text="Minimum stock level before reordering")
+    image = models.ImageField(upload_to='products/', null=True, blank=True, default='products/default.png')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

@@ -18,6 +18,5 @@ def dashboard(request):
     return render(request, 'dashboard.html', context)
 
 def custom_logout(request):
-    # Log the user out and redirect to login page
     logout(request)
     return redirect('login') 

@@ -1,0 +1,32 @@
+.low-stock {
+    color: #dc3545;
+}
+
+.stock-warning {
+    background-color: #fff3cd;
+}
+
+.invoice-header {
+    border-bottom: 2px solid #dee2e6;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+}
+
+.item-row {
+    padding: 1rem;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.total-section {
+    margin-top: 2rem;
+    padding-top: 1rem;
+    border-top: 2px solid #dee2e6;
+}
+
+.dashboard-card {
+    transition: transform 0.2s;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-5px);
+} 

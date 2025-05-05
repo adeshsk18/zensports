@@ -132,6 +132,9 @@
 {% block extra_js %}
 <script>
     $(document).ready(function() {
+        if ($.fn.DataTable.isDataTable('#categoriesTable')) {
+            $('#categoriesTable').DataTable().destroy();
+        }
         $('#categoriesTable').DataTable({
             "order": [[0, "asc"]],
             "pageLength": 25

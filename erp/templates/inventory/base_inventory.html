@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
+{% block extra_css %}
+<style>
+.nav-tabs .nav-link {
+    color: #1e3c72 !important;
+    font-weight: 500;
+}
+.nav-tabs .nav-link.active {
+    color: #fff !important;
+    background-color: #1e3c72 !important;
+    border-color: #1e3c72 #1e3c72 #fff !important;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid">
     <!-- Breadcrumb -->

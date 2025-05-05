@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -6,6 +7,7 @@
     <title>{% block title %}ERP System{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
     <style>
         :root {
             --primary-color: #1e3c72;
@@ -33,7 +35,7 @@
         }
         
         .nav-link {
-            color: rgba(255, 255, 255, 0.8) !important;
+            color: #fff !important;
             padding: 0.5rem 1rem !important;
             border-radius: 5px;
             transition: all 0.3s ease;
@@ -176,10 +178,14 @@
     {% block extra_css %}{% endblock %}
 </head>
 <body>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{% if user.is_authenticated %}{% url 'dashboard' %}{% else %}#{% endif %}">
-                <i class="fas fa-warehouse"></i>Zen ERP System
+                <i class="fas fa-basketball-ball" style="font-size:2.5rem; color:white; vertical-align:middle;"></i>
+                <span style="font-weight:bold; font-size:1.5rem; color:white; margin-left:10px; letter-spacing:2px;">ZEN SPORTS</span>
             </a>
             {% if user.is_authenticated %}
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-expanded="false">
@@ -194,7 +200,7 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="inventoryDropdown" role="button" data-bs-toggle="dropdown">
-                            <i class="fas fa-boxes"></i>Inventory
+                            <i class="fas fa-warehouse"></i>Inventory
                         </a>
                         <ul class="dropdown-menu">
                             <li><a class="dropdown-item" href="{% url 'inventory:product_list' %}"><i class="fas fa-box"></i>Products</a></li>
@@ -237,7 +243,6 @@
         {% block content %}{% endblock %}
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html> 

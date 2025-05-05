@@ -122,30 +122,30 @@ $(document).ready(function() {
     $(document).on('change', '.product-select', function() {
         var row = $(this).closest('tr');
         var selectedOption = $(this).find('option:selected');
-        
+        var quantityInput = row.find('.quantity');
         if (selectedOption.val()) {
             var price = parseFloat(selectedOption.data('price'));
             var maxStock = parseInt(selectedOption.data('stock'));
-            
             // Update price display
             row.find('.price').text(price.toFixed(2));
-            
             // Set max quantity based on stock
-            var quantityInput = row.find('.quantity');
             quantityInput.attr('max', maxStock);
-            
-            // Update total if quantity exists
-            var quantity = parseInt(quantityInput.val()) || 0;
+            // If quantity is empty or less than 1, set to 1
+            var quantity = parseInt(quantityInput.val());
+            if (!quantity || quantity < 1) {
+                quantity = 1;
+                quantityInput.val(quantity);
+            }
+            // Update row total
             var total = price * quantity;
             row.find('.total').text(total.toFixed(2));
-            
             // Update overall totals
             updateTotals();
         } else {
             // Reset values if no product selected
             row.find('.price').text('0.00');
             row.find('.total').text('0.00');
-            row.find('.quantity').val('');
+            quantityInput.val('');
             updateTotals();
         }
     });
@@ -154,23 +154,23 @@ $(document).ready(function() {
     $(document).on('input', '.quantity', function() {
         var row = $(this).closest('tr');
         var selectedOption = row.find('.product-select option:selected');
-        
         if (selectedOption.val()) {
             var maxStock = parseInt(selectedOption.data('stock'));
             var quantity = parseInt($(this).val()) || 0;
             var price = parseFloat(selectedOption.data('price'));
-            
             // Validate quantity against stock
             if (quantity > maxStock) {
                 alert('Quantity cannot exceed available stock of ' + maxStock + ' units');
                 $(this).val(maxStock);
                 quantity = maxStock;
             }
-            
+            if (quantity < 1) {
+                quantity = 1;
+                $(this).val(quantity);
+            }
             // Update row total
             var total = price * quantity;
             row.find('.total').text(total.toFixed(2));
-            
             // Update overall totals
             updateTotals();
         }
@@ -196,15 +196,12 @@ $(document).ready(function() {
 
     function updateTotals() {
         var subtotal = 0;
-        
         // Calculate subtotal from all row totals
         $('.total').each(function() {
             subtotal += parseFloat($(this).text()) || 0;
         });
-        
         var tax = subtotal * 0.1; // 10% tax
         var total = subtotal + tax;
-
         // Update the totals display
         $('#subtotal').text(subtotal.toFixed(2));
         $('#tax').text(tax.toFixed(2));
